@@ -3,7 +3,17 @@ html, body {
     margin: 10px;
     height: 100%;
   }
+  .back {
+    position: fixed;     
+    right: 50px;
+    top: 40px;
+}
 
+.back a {
+    text-decoration: none;
+    color: black;
+    font-family: "ambroise-std", serif;
+}
   .text, #CorrectHidden {
     width: 60%;
     font-family: "ambroise-std", serif;
