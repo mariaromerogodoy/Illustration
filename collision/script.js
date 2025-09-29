@@ -1,22 +1,44 @@
+const customCursor = document.querySelector('.custom-cursor');
+
+document.addEventListener('mousemove', (e) => {
+  // Center the custom cursor on the mouse pointer
+  const cursorWidth = customCursor.offsetWidth;
+  const cursorHeight = customCursor.offsetHeight;
+
+  customCursor.style.left = `${e.clientX - cursorWidth / 1}px`;
+  customCursor.style.top = `${e.clientY - cursorHeight / 1}px`;
+});
+
+
+
 const container = document.querySelector('.collision');
 const canvas = document.getElementById('collisionCanvas');
 const c = canvas.getContext('2d');
 
+
 const mouse = { x: 0, y: 0 };
+
+
+const sprite = new Image();
+sprite.src = 'man.png';   
+let spriteReady = false;
+sprite.onload = () => { spriteReady = true; };
+
+
 const colors = [
   { r: 78, g: 252, b: 2 },
   { r: 244, g: 11, b: 242 },
   { r: 255, g: 250, b: 27 },
 ];
 
+
 function sizeCanvasToContainer() {
   const rect = container.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
   canvas.width  = Math.floor(rect.width  * dpr);
   canvas.height = Math.floor(rect.height * dpr);
-  c.setTransform(dpr, 0, 0, dpr, 0, 0); 
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
-
 sizeCanvasToContainer();
 
 addEventListener('mousemove', (e) => {
@@ -25,10 +47,9 @@ addEventListener('mousemove', (e) => {
   mouse.y = e.clientY - rect.top;
 });
 
-
 addEventListener('resize', () => {
   sizeCanvasToContainer();
-  init();              
+  init();
 });
 
 
@@ -41,12 +62,16 @@ function rotateVelocities(v, t){ return { x: v.x*Math.cos(t)-v.y*Math.sin(t), y:
 function Particle(x, y, radius, rgb) {
   this.x = x; this.y = y;
   this.velocity = { x: (Math.random()-0.5)*3, y: (Math.random()-0.5)*3 };
-  this.radius = radius; this.mass = 1; this.opacity = 0;
+  this.radius = radius; 
+  this.mass = 1; this.opacity = 1;
   this.r = rgb.r; this.g = rgb.g; this.b = rgb.b;
+
+  this.spriteSize = this.radius * 2;
 
   this.update = particles => {
     this.draw();
 
+  
     for (let i=0;i<particles.length;i++){
       const other = particles[i];
       if (this === other) continue;
@@ -66,12 +91,18 @@ function Particle(x, y, radius, rgb) {
       }
     }
 
-    if (distance(this.x, this.y, mouse.x, mouse.y) - this.radius*2 < 100 && this.opacity <= 0.2) {
-      this.opacity += 0.01;
-    } else if (this.opacity > 0) {
-      this.opacity -= 0.01;
+    
+    if (distance(this.x, this.y, mouse.x, mouse.y) - this.radius*2 < 100) {
+      if (this.opacity > 0.0) {   
+        this.opacity -= 0.02;
+      }
+    } else {
+      if (this.opacity < 1) {
+        this.opacity += 0.02;
+      }
     }
 
+    
     if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0)  this.velocity.x *= -1;
     if (this.y + this.radius >= canvas.height || this.y - this.radius <= 0) this.velocity.y *= -1;
 
@@ -80,25 +111,30 @@ function Particle(x, y, radius, rgb) {
   };
 
   this.draw = () => {
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    c.strokeStyle = `rgba(${this.r}, ${this.g}, ${this.b}, 1)`;
-    c.stroke();
-    c.fillStyle = `rgba(${this.r}, ${this.g}, ${this.b}, ${this.opacity})`;
-    c.fill();
+    if (!spriteReady) {
+      c.beginPath();
+      c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      c.fillStyle = `rgba(${this.r}, ${this.g}, ${this.b}, ${this.opacity})`;
+      c.fill();
+      return;
+    }
+
+    const half = this.spriteSize / 2;
+    c.save();
+    c.globalAlpha = Math.max(0.001, this.opacity); 
+    c.drawImage(sprite, this.x - half, this.y - half, this.spriteSize, this.spriteSize);
+    c.restore();
   };
 }
-
 
 let particles = [];
 function init() {
   particles = [];
-  const radius = 12;
-  for (let i = 0; i < 530; i++) {
+  const radius = 25; 
+  for (let i = 0; i < 100; i++) {
     let x = randomIntFromRange(radius, canvas.width  - radius);
     let y = randomIntFromRange(radius, canvas.height - radius);
 
-    
     for (let j = 0; j < particles.length; j++) {
       if (distance(x, y, particles[j].x, particles[j].y) - radius*2 < 0) {
         x = randomIntFromRange(radius, canvas.width  - radius);
