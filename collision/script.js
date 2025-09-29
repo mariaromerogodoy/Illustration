@@ -1,7 +1,6 @@
 const customCursor = document.querySelector('.custom-cursor');
 
 document.addEventListener('mousemove', (e) => {
-  // Center the custom cursor on the mouse pointer
   const cursorWidth = customCursor.offsetWidth;
   const cursorHeight = customCursor.offsetHeight;
 
