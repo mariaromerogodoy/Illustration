@@ -4,15 +4,16 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
   const maskCanvas = document.createElement('canvas');
   const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
 
-  const CONFIG = { count: 15500, size: 3, speed: 1.6, glow: 0.7 };
+  const CONFIG = { count: 15500, size: 3, speed: 1.6, glow: 0.9 };
 
   const PALETTE = [
-    { h: 305, s: 100, l: 62 }, // neon magenta
-    { h: 322, s: 95,  l: 64 }, // hot pink
-    { h: 58,  s: 100, l: 63 }, // neon yellow
-    { h: 95,  s: 100, l: 56 }, // lime
-    { h: 130, s: 90,  l: 55 }, // electric green
-    { h: 170, s: 95,  l: 58 }, // aqua/teal
+    { h: 305, s: 100, l: 62 }, 
+    { h: 322, s: 95,  l: 64 }, 
+    { h: 58,  s: 100, l: 63 }, 
+    { h: 95,  s: 100, l: 56 }, 
+    { h: 130, s: 90,  l: 55 }, 
+    { h: 170, s: 95,  l: 58 }, 
+    { h: 255, s: 255,  l: 255 }, 
   ];
 
   function hsla(h,s,l,a){ return `hsl(${h} ${s}% ${l}% / ${a})`; }
@@ -106,12 +107,11 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
   
     ctx.save();
   
-    // hard clear to black every frame
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, canvas.width / DPR, canvas.height / DPR);
   
-    // draw particles (matte) or use 'lighter' for glow
+
     ctx.globalCompositeOperation = 'lighten';
     ctx.shadowBlur = glow;
   

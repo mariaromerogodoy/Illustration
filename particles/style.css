@@ -17,9 +17,24 @@ html, body {
   pointer-events: none;
 }
 
+.tittle {
+    position:fixed; inset: 0;
+    display: grid; place-items: left;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .tittle img{ 
+    padding-top: 13%;
+      height: 700px;
+      width: auto; 
+      display: block;
+       }
+  
 .site-header{
   position: fixed;
-  top: -10; left: 0; right: 0;
+  top: -10; 
+  left: 0; 
+  right: 0;
   height: var(--header-h);
   z-index: 10;
   display: flex;
@@ -27,12 +42,18 @@ html, body {
   justify-content: center;
 }
 .site-header img{ 
-    height: auto; width: 100%; display: block;
+    height: auto; 
+    width: 100%; 
+    display: block;
     border: 2px solid black; }
 
-main{ position: relative; z-index: 2; }
+  
 
-.hero-spacer{ min-height: 100vh; }     /* landing shows the canvas */
+main{ 
+    position: relative; 
+    z-index: 2; }
+
+.hero-spacer{ min-height: 100vh; }   
 
 .image-section {
     width: 100;
