@@ -25,6 +25,7 @@ html, body {
   }
   .tittle img{ 
     padding-top: 13%;
+    padding-left: 1%;
       height: 700px;
       width: auto; 
       display: block;
@@ -53,7 +54,8 @@ main{
     position: relative; 
     z-index: 2; }
 
-.hero-spacer{ min-height: 100vh; }   
+.hero-spacer{ 
+    min-height: 100vh; }   
 
 .image-section {
     width: 100;
@@ -65,7 +67,7 @@ main{
     background: #ffffff;
   }
   .image-section img {
-    width: min(1000px, 92vw);
+    width: 100%;
     height: auto;
     display: block;
   }
