@@ -4,7 +4,7 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
   const maskCanvas = document.createElement('canvas');
   const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
 
-  const CONFIG = { count: 5500, size: 8, speed: 1.1, glow: 0 };
+  const CONFIG = { count: 15500, size: 3, speed: 1.6, glow: 0.7 };
 
   const PALETTE = [
     { h: 305, s: 100, l: 62 }, // neon magenta
@@ -112,7 +112,7 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
     ctx.fillRect(0, 0, canvas.width / DPR, canvas.height / DPR);
   
     // draw particles (matte) or use 'lighter' for glow
-    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'lighten';
     ctx.shadowBlur = glow;
   
     for (let i = 0; i < particles.length; i++) {
