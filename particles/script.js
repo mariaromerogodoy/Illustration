@@ -4,7 +4,7 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
   const maskCanvas = document.createElement('canvas');
   const maskCtx = maskCanvas.getContext('2d', { willReadFrequently: true });
 
-  const CONFIG = { count: 15500, size: 3, speed: 1.6, glow: 0.9 };
+  const CONFIG = { count: 700, size: 4, speed: 95, glow: 0.9 };
 
   const PALETTE = [
     { h: 305, s: 100, l: 62 }, 
@@ -84,7 +84,8 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
     particles = new Array(n).fill(0).map(() => {
       const p = randInMask();
       const angle = Math.random() * Math.PI * 2;
-      const speed = CONFIG.speed * (0.4 + Math.random() * 0.6);
+      const speed = CONFIG.speed * (0.8 + Math.random() * 1.2);
+      const maxV = 95.5 * CONFIG.speed* DPR
       const base = PALETTE[Math.floor(Math.random()*PALETTE.length)];
       return {
         x: p.x, y: p.y,
@@ -118,7 +119,7 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
   
-      const maxV = 3.5 * CONFIG.speed * DPR;
+      const maxV = 9.5 * CONFIG.speed * DPR;
       const vmag = Math.hypot(p.vx, p.vy);
       if (vmag > maxV) { p.vx = p.vx / vmag * maxV; p.vy = p.vy / vmag * maxV; }
   
@@ -135,11 +136,42 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       ctx.beginPath();
       ctx.rect((p.x / DPR) - size/2, (p.y / DPR) - size/2, size, size);
       ctx.fill();
+      
     }
   
+    connect();
+
     ctx.restore();
     requestAnimationFrame(step);
+    
   }
+
+
+
+  function connect() {
+    for (let a = 0; a < particles.length; a++) {
+    for (let b = a + 1; b < particles.length; b++) {
+      const dx = particles[a].x - particles[b].x;
+      const dy = particles[a].y - particles[b].y;
+      const dist2 = dx*dx + dy*dy;
+
+      // pick a sensible max distance in DEVICE pixels
+      const MAX_DIST = 40 * DPR;           // ~90px at 1x DPR
+      if (dist2 < MAX_DIST * MAX_DIST) {
+        // fade by distance
+        const alpha = 0.20 * (1 - Math.sqrt(dist2) / MAX_DIST);
+        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+
+        ctx.beginPath();
+        // divide by DPR because your drawing coords for shapes do
+        ctx.moveTo(particles[a].x / DPR, particles[a].y / DPR);
+        ctx.lineTo(particles[b].x / DPR, particles[b].y / DPR);
+        ctx.stroke();
+      }
+    }
+  }
+}
 
 
   function setMaskImage(img) {
