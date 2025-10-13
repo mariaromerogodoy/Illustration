@@ -155,16 +155,16 @@ const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       const dy = particles[a].y - particles[b].y;
       const dist2 = dx*dx + dy*dy;
 
-      // pick a sensible max distance in DEVICE pixels
-      const MAX_DIST = 40 * DPR;           // ~90px at 1x DPR
+     
+      const MAX_DIST = 40 * DPR;          
       if (dist2 < MAX_DIST * MAX_DIST) {
-        // fade by distance
+        
         const alpha = 0.20 * (1 - Math.sqrt(dist2) / MAX_DIST);
         ctx.lineWidth = 0.7;
         ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
 
         ctx.beginPath();
-        // divide by DPR because your drawing coords for shapes do
+       
         ctx.moveTo(particles[a].x / DPR, particles[a].y / DPR);
         ctx.lineTo(particles[b].x / DPR, particles[b].y / DPR);
         ctx.stroke();
