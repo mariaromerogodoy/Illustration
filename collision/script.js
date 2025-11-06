@@ -18,7 +18,7 @@ const PALETTE = [
 function hsla(h,s,l,a){ return `hsl(${h} ${s}% ${l}% / ${a})`; }
 
 let W=0, H=0, particles=[], maskImg=new Image(), maskReady=false, imageData=null;
-const DEFAULT_IMAGE_URL = 'body.svg';
+const DEFAULT_IMAGE_URL = 'personn.png';
 
 
 function resize() {
